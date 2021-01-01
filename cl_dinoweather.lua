@@ -33,32 +33,37 @@ AddEventHandler("dinoweather:syncWeather", function(activeWeathers)
   activeWeather = activeWeathers
 end)
 
-AddEventHandler("playerSpawned", function(spawnInfo)
+Citizen.CreateThread(function()
   TriggerServerEvent("dinoweather:syncWeather")
-end)
 
-Citizen.CreateThread(function()
-  while true do
-    Citizen.Wait(1000 * 60)
-    TriggerServerEvent("dinoweather:syncWeather")
-  end
-end)
-
-Citizen.CreateThread(function()
   while true do
     Citizen.Wait(1000)
+
     local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(PlayerId())))
     local zone = GetNameOfZone(x, y, z)
+
     for i, weatherZone in ipairs(activeWeather) do
       if weatherZone[1] == zone and lastZone ~= zone then
-        Citizen.Wait(15000)
+
         ClearOverrideWeather()
         ClearWeatherTypePersist()
+
         SetWeatherTypeOverTime(weatherZone[2], 15.0)
         SetWeatherTypePersist(weatherZone[2])
         SetWeatherTypeNow(weatherZone[2])
         SetWeatherTypeNowPersist(weatherZone[2])
+  
+        if weatherZone[2] == 'XMAS' then
+          SetForceVehicleTrails(true)
+          SetForcePedFootstepsTracks(true)
+        else
+          SetForceVehicleTrails(false)
+          SetForcePedFootstepsTracks(false)
+        end
+
         lastZone = zone
+
+        break
       end
     end
   end

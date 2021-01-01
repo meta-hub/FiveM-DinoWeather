@@ -26,7 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
 WeatherConfig = {}
-WeatherConfig = setmetatable(WeatherConfig, {})
 
 activeWeatherSystems = {}
 
@@ -136,48 +135,3 @@ WeatherConfig.timesOfYear = {
   { 9, 10, 11 }, --FALL 3
   { 12, 1, 2 } --WINTER 4
 }
-
-function getCurrentSeason()
-  for i, timeOfYear in ipairs(WeatherConfig.timesOfYear) do
-    for k, month in ipairs(WeatherConfig.timesOfYear[i]) do
-      if month == os.date("*t").month then
-        return i
-      end
-    end
-  end
-end
-
-function isSnowDay()
-  for i, decemberSnowDay in ipairs(WeatherConfig.decemberSnowDays) do
-    if decemberSnowDay == os.date("*t").day then
-      return true
-    end
-  end
-  return false
-end
-
-function findZoneBySubZone(zoneName)
-  for i, weatherSystem in ipairs(WeatherConfig.weatherSystems) do
-    for _, weatherZone in ipairs(weatherSystem[1]) do
-      if weatherZone == zoneName then
-        return i
-      end
-    end
-  end
-end
-
-function randomizeSystems()
-  activeWeatherSystems = {}
-  for i, weatherSystem in ipairs(WeatherConfig.weatherSystems) do
-    local currentSeason = getCurrentSeason()
-    local availableWeathers = weatherSystem[currentSeason + 1]
-    local pickedWeather = availableWeathers[math.random(1, #availableWeathers)]
-    for _, weatherZone in ipairs(weatherSystem[1]) do
-      if os.date("*t").month == 12 and isSnowDay() and WeatherConfig.snowEnabled then
-        table.insert(activeWeatherSystems, {weatherZone, "XMAS"})
-      else
-        table.insert(activeWeatherSystems, {weatherZone, pickedWeather})
-      end
-    end
-  end
-end
