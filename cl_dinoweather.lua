@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ]]
 
-local activeWeather = {}
+local activeWeather = false
 local lastZone = 0
 
 RegisterNetEvent("dinoweather:syncWeather")
@@ -35,6 +35,7 @@ end)
 
 Citizen.CreateThread(function()
   TriggerServerEvent("dinoweather:syncWeather")
+  while not activeWeather do Wait(0) end
 
   while true do
     Citizen.Wait(1000)
