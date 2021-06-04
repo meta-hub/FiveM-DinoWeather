@@ -25,19 +25,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ]]
 
-fx_version 'adamant'
-games { 'gta5' }
+fx_version 'cerulean'
+game 'gta5'
 
-description "DinoWeather"
-author "Slavko Avsenik"
-version "1.0.2"
+description "DinoWeather'
+author 'Slavko Avsenik'
+version '1.0.2'
 
 server_scripts {
-  "sh_config.lua",
-  "sv_dinoweather.lua"
+  'sh_config.lua',
+  'sv_dinoweather.lua'
 }
 
 client_scripts {
-  "sh_config.lua",
-  "cl_dinoweather.lua"
+  'sh_config.lua',
+  'cl_dinoweather.lua'
 }
